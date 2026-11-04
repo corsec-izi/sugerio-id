@@ -21,6 +21,6 @@ Sekolah yang ingin punya halaman penerimaan siswa baru yang rapi tanpa membangun
 
 1. Buka generator, isi data sekolah di panel kiri.
 2. Lihat hasilnya langsung di panel kanan.
-3. Kalau cocok dan ingin versi asli untuk sekolahmu (data lengkap, tanpa watermark, formulir yang benar-benar mengirim data, alamat web sendiri), hubungi lewat Instagram.
+3. Kalau cocok dan ingin versi asli untuk sekolahmu (data lengkap, tanpa watermark, formulir yang benar-benar mengirim data, alamat web sendiri), kirim email ke sugerio.id@gmail.com.
 
-Versi asli mulai dari 150rb Rupiah saja.
+Versi asli mulai dari 250rb Rupiah saja.

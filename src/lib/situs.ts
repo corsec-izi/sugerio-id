@@ -5,6 +5,7 @@ export const SITUS = {
   tagline: 'Belajar AI dan aplikasi kecil yang bikin kerja lebih ringan',
   deskripsi:
     'Tempat belajar AI yang praktis dan etalase aplikasi kecil buatan Sugerio, untuk sekolah, profesional, dan keluarga. Diperbarui setiap pekan.',
+  email: 'sugerio.id@gmail.com',
   instagram: 'https://instagram.com/riohafandi',
   instagramNama: '@riohafandi',
   lynk: 'https://lynk.id/sugerio',

@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { akhirAcara, bulanSingkat, rentangTanggal, tglISO } from '../lib/konten';
+
+interface Props { acara: CollectionEntry<'acara'> }
+const { acara } = Astro.props;
+const d = acara.data;
+---
+<li class="acara" data-akhir={tglISO(akhirAcara(acara))}>
+  <div class="tgl" aria-hidden="true">
+    <b>{d.tanggal.getUTCDate()}</b>
+    <span>{bulanSingkat(d.tanggal)}</span>
+  </div>
+  <div class="isi">
+    <h3>{d.judul}</h3>
+    <div class="meta">
+      {rentangTanggal(d.tanggal, d.selesai)}{d.waktu ? `, ${d.waktu}` : ''} &middot; {d.lokasi}
+    </div>
+    <p>{d.ringkasan}</p>
+    {d.daftar && <a class="tombol kecil daftar-link" href={d.daftar}>Daftar atau info lengkap</a>}
+  </div>
+</li>

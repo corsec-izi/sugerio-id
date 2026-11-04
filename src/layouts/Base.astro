@@ -1,0 +1,83 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITUS } from '../lib/situs';
+
+interface Props {
+  judul?: string;
+  deskripsi?: string;
+  tipe?: 'website' | 'article';
+}
+const { judul, deskripsi = SITUS.deskripsi, tipe = 'website' } = Astro.props;
+const judulLengkap = judul ? `${judul} | ${SITUS.nama}` : `${SITUS.nama} | ${SITUS.tagline}`;
+const kanonik = new URL(Astro.url.pathname, SITUS.url).href;
+---
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{judulLengkap}</title>
+    <meta name="description" content={deskripsi} />
+    <link rel="canonical" href={kanonik} />
+    <meta name="theme-color" content="#1F6B4F" />
+    <meta property="og:title" content={judulLengkap} />
+    <meta property="og:description" content={deskripsi} />
+    <meta property="og:url" content={kanonik} />
+    <meta property="og:type" content={tipe} />
+    <meta property="og:site_name" content={SITUS.nama} />
+    <meta property="og:locale" content="id_ID" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="Sugerio" href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <a class="lompat" href="#isi">Lewati ke isi</a>
+    <Header />
+    <main id="isi">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Memisahkan acara mendatang dan lampau berdasarkan tanggal pengunjung, jadi tidak perlu deploy ulang. -->
+    <script is:inline>
+      (function () {
+        var d = new Date();
+        var p = function (n) { return (n < 10 ? '0' : '') + n; };
+        var hari = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+        var lampau = function (li) { return li.getAttribute('data-akhir') < hari; };
+        var anak = function (el) { return Array.prototype.slice.call(el.children); };
+
+        var beranda = document.querySelector('[data-acara-beranda]');
+        if (beranda) {
+          var maks = parseInt(beranda.getAttribute('data-maks') || '3', 10);
+          var n = 0;
+          anak(beranda).forEach(function (li) {
+            if (lampau(li) || n >= maks) { li.hidden = true; } else { n++; }
+          });
+          var k = document.querySelector('[data-acara-kosong]');
+          if (k) k.hidden = n > 0;
+          if (n === 0) beranda.hidden = true;
+        }
+
+        var depan = document.getElementById('acara-mendatang');
+        var lalu = document.getElementById('acara-lampau');
+        if (depan && lalu) {
+          anak(depan).forEach(function (li) {
+            if (lampau(li)) {
+              li.classList.add('lampau');
+              lalu.insertBefore(li, lalu.firstChild);
+            }
+          });
+          document.getElementById('kosong-mendatang').hidden = depan.children.length > 0;
+          document.getElementById('bagian-lampau').hidden = lalu.children.length === 0;
+        }
+      })();
+    </script>
+  </body>
+</html>

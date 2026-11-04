@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import KartuTulisan from '../../components/KartuTulisan.astro';
+import { ambilCatatan } from '../../lib/konten';
+
+const semua = await ambilCatatan();
+---
+<Base judul="Catatan Pekan" deskripsi="Ringkasan mingguan dari Sugerio: apa yang baru dirilis, diperbaiki, dan sedang disiapkan.">
+  <div class="halaman-kepala">
+    <span class="label">Catatan Pekan</span>
+    <h1>Apa yang baru, tiap pekan</h1>
+    <p class="pengantar">Catatan singkat soal produk yang dirilis atau diperbaiki, tulisan baru, dan rencana pekan depan.</p>
+  </div>
+  <div class="halaman">
+    {semua.length === 0
+      ? <p class="kosong">Catatan pertama akan terbit di sini.</p>
+      : (
+        <div class="grid">
+          {semua.map((t) => (
+            <KartuTulisan href={`/catatan/${t.id}/`} judul={t.data.judul} ringkasan={t.data.ringkasan} tanggal={t.data.tanggal} label={t.data.pekan ? `Pekan ${t.data.pekan}` : undefined} />
+          ))}
+        </div>
+      )}
+  </div>
+</Base>

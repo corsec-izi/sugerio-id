@@ -1,0 +1,15 @@
+---
+interface Props {
+  nama: 'rumah' | 'centang' | 'daftar' | 'buku' | 'bintang';
+  ukuran?: number;
+  warna?: string;
+}
+const { nama, ukuran = 22, warna = '#14261E' } = Astro.props;
+---
+<svg aria-hidden="true" width={ukuran} height={ukuran} viewBox="0 0 24 24" fill="none" stroke={warna} stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  {nama === 'rumah' && (<><path d="M3 10l9-6 9 6" /><path d="M5 10v9h14v-9" /><path d="M10 19v-5h4v5" /></>)}
+  {nama === 'centang' && (<><path d="M9 11l3 3 8-8" /><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9" /></>)}
+  {nama === 'daftar' && (<><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 8h8" /><path d="M8 12h8" /><path d="M8 16h5" /></>)}
+  {nama === 'buku' && (<><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" /><path d="M4 21V5" /><path d="M9 8h6" /></>)}
+  {nama === 'bintang' && (<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z" />)}
+</svg>

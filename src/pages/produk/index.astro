@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import DaftarProduk from '../../components/DaftarProduk.astro';
+import { ambilProduk } from '../../lib/konten';
+
+const produk = await ambilProduk();
+---
+<Base judul="Produk" deskripsi="Aplikasi web praktis dari Sugerio untuk sekolah, profesional, dan keluarga. Bisa dicoba langsung dari browser.">
+  <div class="halaman-kepala">
+    <span class="label">Produk</span>
+    <h1>Aplikasi kecil yang bikin kerja lebih ringan</h1>
+    <p class="pengantar">Semua bisa dicoba langsung dari browser, tanpa instal. Yang bertanda Beta masih diuji, yang bertanda Segera sedang disiapkan.</p>
+  </div>
+  <div class="halaman">
+    <DaftarProduk produk={produk} />
+  </div>
+</Base>

@@ -1,0 +1,31 @@
+---
+import Base from './Base.astro';
+import { tglIndonesia, tglISO } from '../lib/konten';
+
+interface Props {
+  judul: string;
+  ringkasan: string;
+  tanggal?: Date;
+  diperbarui?: Date;
+  label?: string;
+  lencana?: string;
+  kembaliHref: string;
+  kembaliLabel: string;
+}
+const { judul, ringkasan, tanggal, diperbarui, label, lencana, kembaliHref, kembaliLabel } = Astro.props;
+---
+<Base judul={judul} deskripsi={ringkasan} tipe="article">
+  <article class="artikel">
+    <a class="kembali" href={kembaliHref}>&larr; {kembaliLabel}</a>
+    <div class="meta">
+      {label && <span class="lencana">{label}</span>}
+      {lencana && <span class="lencana beta">{lencana}</span>}
+      {tanggal && <time datetime={tglISO(tanggal)}>{tglIndonesia(tanggal)}</time>}
+      {diperbarui && <span>Diperbarui <time datetime={tglISO(diperbarui)}>{tglIndonesia(diperbarui)}</time></span>}
+    </div>
+    <h1>{judul}</h1>
+    <p class="ringkas">{ringkasan}</p>
+    <slot name="aksi" />
+    <div class="prose"><slot /></div>
+  </article>
+</Base>

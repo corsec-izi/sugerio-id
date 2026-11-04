@@ -1,0 +1,22 @@
+---
+import { SITUS } from '../lib/situs';
+const tahun = new Date().getFullYear();
+---
+<footer class="kaki">
+  <div class="dalam">
+    <div class="kiri">
+      <strong>sugerio</strong>
+      <span>{SITUS.tagline}.</span>
+      <span>© {tahun} Sugerio</span>
+    </div>
+    <nav aria-label="Tautan kaki">
+      <a href="/belajar/">Belajar</a>
+      <a href="/produk/">Produk</a>
+      <a href="/catatan/">Catatan</a>
+      <a href="/acara/">Acara</a>
+      <a href="/rss.xml">RSS</a>
+      <a href={SITUS.lynk}>Lynk.id</a>
+      <a href={SITUS.instagram}>Instagram</a>
+    </nav>
+  </div>
+</footer>

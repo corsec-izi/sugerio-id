@@ -1,0 +1,148 @@
+---
+import Base from '../layouts/Base.astro';
+import Ikon from '../components/Ikon.astro';
+import DaftarProduk from '../components/DaftarProduk.astro';
+import KartuTulisan from '../components/KartuTulisan.astro';
+import ItemAcara from '../components/ItemAcara.astro';
+import { ambilAcara, ambilBelajar, ambilCatatan, ambilProduk, labelJenis, tglIndonesia, tglISO } from '../lib/konten';
+import { SITUS } from '../lib/situs';
+
+const [belajar, catatan, produk, acara] = await Promise.all([
+  ambilBelajar(), ambilCatatan(), ambilProduk(), ambilAcara(),
+]);
+const ubin = produk.filter((p) => p.data.hero && p.data.status !== 'segera').slice(0, 3);
+const catatanTerbaru = catatan[0];
+---
+<Base>
+  <section class="hero" id="top">
+    <div class="teks">
+      <span class="pil">Belajar AI &amp; solusi digital tepat guna</span>
+      <h1>Ubah Rutinitas Rumit Jadi Lebih Ringan dan Teratur.</h1>
+      <p class="sub">Tempat belajar AI yang praktis, plus aplikasi kecil buatan sendiri untuk sekolah, profesional, dan keluarga. Tanpa instalasi, siap pakai, dan diperbarui setiap pekan.</p>
+      <div class="aksi">
+        <a class="tombol" href="/produk/">Lihat produk</a>
+        <a class="tombol garis" href="/belajar/">Mulai belajar AI</a>
+      </div>
+    </div>
+    {ubin.length > 0 && (
+      <div class="ubin-grid" aria-hidden="true">
+        {ubin.map((p, i) => (
+          <div class="ubin">
+            <span class="ikon-kotak"><Ikon nama={p.data.ikon} warna={i === 0 ? '#FFFFFF' : '#14261E'} /></span>
+            <strong>{p.data.nama}</strong>
+            {p.data.tagline && <span class="ket">{p.data.tagline}</span>}
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <section class="visi">
+    <div class="dalam">
+      <span class="label">Visi kami</span>
+      <p>Menyederhanakan manajemen kerja dan aktivitas harian lewat teknologi yang humanis dan tepat guna.</p>
+    </div>
+  </section>
+
+  {belajar.length > 0 && (
+    <section class="bagian" id="belajar">
+      <div class="bagian-kepala">
+        <div class="judul">
+          <h2>Belajar AI</h2>
+          <p class="pengantar">Panduan praktis dan kabar terbaru dunia AI, ditulis dengan bahasa sehari-hari.</p>
+        </div>
+        <a class="tautan-semua" href="/belajar/">Semua tulisan</a>
+      </div>
+      <div class="grid">
+        {belajar.slice(0, 3).map((t) => (
+          <KartuTulisan href={`/belajar/${t.id}/`} judul={t.data.judul} ringkasan={t.data.ringkasan} tanggal={t.data.tanggal} label={labelJenis[t.data.jenis]} />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="bagian" id="produk">
+    <div class="bagian-kepala">
+      <div class="judul">
+        <h2>Produk</h2>
+        <p class="pengantar">Semua bisa dicoba langsung dari browser, tanpa instal. Daftar ini bertambah dan diperbarui tiap pekan.</p>
+      </div>
+      <a class="tautan-semua" href="/produk/">Lihat semua</a>
+    </div>
+    <DaftarProduk produk={produk} />
+  </section>
+
+  {catatanTerbaru && (
+    <section class="pita">
+      <div class="dalam">
+        <div class="kiri">
+          <span class="label">Catatan Pekan</span>
+          <h2>Apa yang baru di Sugerio pekan ini</h2>
+          <a class="tautan-semua" href="/catatan/">Lihat semua catatan</a>
+        </div>
+        <div class="kanan">
+          <time class="meta" datetime={tglISO(catatanTerbaru.data.tanggal)}>{tglIndonesia(catatanTerbaru.data.tanggal)}</time>
+          <h3><a href={`/catatan/${catatanTerbaru.id}/`}>{catatanTerbaru.data.judul}</a></h3>
+          <p>{catatanTerbaru.data.ringkasan}</p>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="bagian rapat" id="acara">
+    <div class="bagian-kepala">
+      <div class="judul">
+        <h2>Acara berikutnya</h2>
+        <p class="pengantar">Kelas, webinar, dan sesi tanya jawab seputar AI dan aplikasi Sugerio.</p>
+      </div>
+      <a class="tautan-semua" href="/acara/">Semua acara</a>
+    </div>
+    {acara.length > 0 ? (
+      <>
+        <ol class="daftar-acara" data-acara-beranda data-maks="3">
+          {acara.map((a) => <ItemAcara acara={a} />)}
+        </ol>
+        <p class="kosong" data-acara-kosong hidden>Belum ada acara yang dijadwalkan. Pantau halaman ini atau ikuti Instagram {SITUS.instagramNama}.</p>
+      </>
+    ) : (
+      <p class="kosong">Belum ada acara yang dijadwalkan. Pantau halaman ini atau ikuti Instagram {SITUS.instagramNama}.</p>
+    )}
+  </section>
+
+  <section class="jasa" id="jasa">
+    <div class="dalam">
+      <div class="kiri">
+        <span class="label">Jasa</span>
+        <h2>Butuh halaman PPDB untuk sekolahmu?</h2>
+        <p class="pengantar">Coba generatornya dulu. Kalau cocok, kami buatkan versi asli untuk sekolahmu.</p>
+      </div>
+      <div class="kanan">
+        <strong>Versi asli sudah termasuk</strong>
+        <ul class="centang">
+          {['Data lengkap sekolah, tanpa watermark', 'Formulir pendaftaran yang benar-benar mengirim data', 'Alamat web sendiri untuk sekolah', 'Mulai dari 150rb Rupiah saja'].map((t) => (
+            <li>
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F6B4F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7" /></svg>
+              <span>{t}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="aksi">
+          <a class="tombol" href={SITUS.instagram}>DM Instagram {SITUS.instagramNama}</a>
+          <a class="tombol garis" href="https://ppdb-generator.sugerio.id">Coba generator</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cerita" id="cerita">
+    <div class="kartu-nama" aria-hidden="true">
+      <strong>Suger<em>io</em></strong>
+      <span>Suger + Rio</span>
+    </div>
+    <div class="teks">
+      <span class="label">Cerita di balik nama</span>
+      <h2>Dari nama desa dan nama sendiri.</h2>
+      <p>Sugerio gabungan dari Suger, desa tempat saya lahir, dan Rio, nama saya. Setiap aplikasi di sini berangkat dari kebutuhan yang saya temui sendiri, di pekerjaan, di sekolah anak, dan di rumah. Dibuat sederhana, supaya siapa pun bisa langsung pakai.</p>
+    </div>
+  </section>
+</Base>

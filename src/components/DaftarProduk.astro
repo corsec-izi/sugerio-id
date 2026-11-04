@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import KartuProduk from './KartuProduk.astro';
+
+interface Props { produk: CollectionEntry<'produk'>[] }
+const { produk } = Astro.props;
+
+const urutan = ['Untuk sekolah', 'Untuk diri dan keluarga', 'Untuk profesional'] as const;
+const dipakai = produk.filter((p) => p.data.status !== 'segera');
+const segera = produk.filter((p) => p.data.status === 'segera');
+const kelompok = urutan
+  .map((nama) => ({ nama, isi: dipakai.filter((p) => p.data.kelompok === nama) }))
+  .filter((k) => k.isi.length > 0);
+---
+{kelompok.map((k) => (
+  <div class="kelompok">
+    <h3>{k.nama}</h3>
+    <div class="grid">
+      {k.isi.map((p) => <KartuProduk produk={p} />)}
+    </div>
+  </div>
+))}
+{segera.length > 0 && (
+  <div class="kelompok">
+    <h3>Sedang disiapkan</h3>
+    <div class="grid">
+      {segera.map((p) => <KartuProduk produk={p} />)}
+    </div>
+  </div>
+)}
+{produk.length === 0 && <p class="kosong">Belum ada produk yang ditampilkan.</p>}

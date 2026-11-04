@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import ItemAcara from '../../components/ItemAcara.astro';
+import { ambilAcara } from '../../lib/konten';
+import { SITUS } from '../../lib/situs';
+
+const acara = await ambilAcara();
+---
+<Base judul="Acara" deskripsi="Jadwal kelas, webinar, dan sesi tanya jawab seputar AI dan aplikasi Sugerio.">
+  <div class="halaman-kepala">
+    <span class="label">Acara</span>
+    <h1>Kelas dan acara seputar AI</h1>
+    <p class="pengantar">Jadwal terbaru ada di sini. Acara yang sudah lewat otomatis pindah ke arsip di bawah.</p>
+  </div>
+  <div class="halaman">
+    {acara.length === 0 ? (
+      <p class="kosong">Belum ada acara yang dijadwalkan. Pantau halaman ini atau ikuti Instagram {SITUS.instagramNama}.</p>
+    ) : (
+      <>
+        <section class="bagian-halaman">
+          <h2 class="sub-judul">Mendatang</h2>
+          <ol class="daftar-acara" id="acara-mendatang">
+            {acara.map((a) => <ItemAcara acara={a} />)}
+          </ol>
+          <p class="kosong" id="kosong-mendatang" hidden>Belum ada acara mendatang. Pantau halaman ini atau ikuti Instagram {SITUS.instagramNama}.</p>
+        </section>
+        <section class="bagian-halaman" id="bagian-lampau" hidden>
+          <h2 class="sub-judul">Sudah lewat</h2>
+          <ol class="daftar-acara" id="acara-lampau"></ol>
+        </section>
+      </>
+    )}
+  </div>
+</Base>

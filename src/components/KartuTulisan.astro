@@ -1,0 +1,21 @@
+---
+import { tglIndonesia, tglISO } from '../lib/konten';
+
+interface Props {
+  href: string;
+  judul: string;
+  ringkasan: string;
+  tanggal: Date;
+  label?: string;
+}
+const { href, judul, ringkasan, tanggal, label } = Astro.props;
+---
+<article class="kartu">
+  <div class="meta">
+    {label && <span class="lencana">{label}</span>}
+    <time datetime={tglISO(tanggal)}>{tglIndonesia(tanggal)}</time>
+  </div>
+  <h3 class="nama-kartu"><a href={href}>{judul}</a></h3>
+  <p>{ringkasan}</p>
+  <div class="tautan"><a href={href}>Baca selengkapnya</a></div>
+</article>

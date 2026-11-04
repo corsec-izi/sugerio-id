@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import KartuTulisan from '../../components/KartuTulisan.astro';
+import { ambilBelajar, labelJenis } from '../../lib/konten';
+
+const semua = await ambilBelajar();
+const bagian = [
+  { jenis: 'kabar-ai', judul: 'Kabar AI', ket: 'Ringkasan perkembangan AI yang relevan untuk kerja dan sekolah.' },
+  { jenis: 'panduan', judul: 'Panduan', ket: 'Langkah praktis yang bisa langsung dicoba, dari dasar sampai lanjutan.' },
+].map((b) => ({ ...b, isi: semua.filter((t) => t.data.jenis === b.jenis) }));
+---
+<Base judul="Belajar AI" deskripsi="Panduan praktis dan kabar terbaru seputar AI, ditulis dengan bahasa sehari-hari untuk guru, profesional, dan keluarga.">
+  <div class="halaman-kepala">
+    <span class="label">Belajar</span>
+    <h1>Belajar AI, pelan-pelan dan praktis</h1>
+    <p class="pengantar">Panduan yang bisa langsung dipakai dan kabar terbaru dunia AI. Tanpa istilah rumit, tanpa janji berlebihan.</p>
+  </div>
+  <div class="halaman">
+    {semua.length === 0 && <p class="kosong">Tulisan pertama sedang disiapkan. Segera hadir.</p>}
+    {bagian.filter((b) => b.isi.length > 0).map((b) => (
+      <section class="bagian-halaman">
+        <div>
+          <h2 class="sub-judul">{b.judul}</h2>
+          <p class="pengantar" style="font-size:16px;color:var(--abu);margin-top:6px">{b.ket}</p>
+        </div>
+        <div class="grid">
+          {b.isi.map((t) => (
+            <KartuTulisan href={`/belajar/${t.id}/`} judul={t.data.judul} ringkasan={t.data.ringkasan} tanggal={t.data.tanggal} label={labelJenis[t.data.jenis]} />
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</Base>

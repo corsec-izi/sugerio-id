@@ -1,0 +1,38 @@
+---
+import { render } from 'astro:content';
+import Artikel from '../../layouts/Artikel.astro';
+import { ambilProduk } from '../../lib/konten';
+
+export async function getStaticPaths() {
+  const semua = await ambilProduk();
+  return semua.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const status = { rilis: 'Sudah bisa dipakai', beta: 'Beta', segera: 'Segera hadir' }[d.status];
+const labelTautan = d.tautanLabel ?? (d.status === 'beta' ? `Coba ${d.nama}` : `Buka ${d.nama}`);
+---
+<Artikel
+  judul={d.nama}
+  ringkasan={d.ringkasan}
+  diperbarui={d.diperbarui}
+  label={`${d.kelompok} · ${d.harga}`}
+  lencana={d.draft ? 'Draf' : status}
+  kembaliHref="/produk/"
+  kembaliLabel="Semua produk"
+>
+  <div slot="aksi" class="kotak-aksi">
+    {d.tautan && d.status !== 'segera'
+      ? (
+        <>
+          <p>{d.status === 'beta' ? 'Versi beta, masukanmu sangat membantu.' : 'Langsung bisa dipakai dari browser.'}</p>
+          <a class="tombol" href={d.tautan}>{labelTautan}</a>
+        </>
+      )
+      : <p>Produk ini belum dibuka. Pantau Catatan Pekan untuk kabar terbarunya.</p>}
+    {d.kabar && <a class="tombol garis" href={d.kabar}>Kabar terbaru</a>}
+  </div>
+  <Content />
+</Artikel>

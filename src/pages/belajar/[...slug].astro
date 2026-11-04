@@ -1,0 +1,26 @@
+---
+import { render } from 'astro:content';
+import Artikel from '../../layouts/Artikel.astro';
+import { ambilBelajar, labelJenis } from '../../lib/konten';
+
+export async function getStaticPaths() {
+  const semua = await ambilBelajar();
+  return semua.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+<Artikel
+  judul={d.judul}
+  ringkasan={d.ringkasan}
+  tanggal={d.tanggal}
+  diperbarui={d.diperbarui}
+  label={labelJenis[d.jenis]}
+  lencana={d.draft ? 'Draf' : undefined}
+  kembaliHref="/belajar/"
+  kembaliLabel="Semua tulisan belajar"
+>
+  <Content />
+</Artikel>

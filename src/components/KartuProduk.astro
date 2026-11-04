@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { produk: CollectionEntry<'produk'> }
+const { produk } = Astro.props;
+const d = produk.data;
+const labelStatus = { rilis: 'Sudah bisa dipakai', beta: 'Beta', segera: 'Segera' }[d.status];
+const labelTautan = d.tautanLabel ?? (d.status === 'beta' ? `Coba ${d.nama}` : `Buka ${d.nama}`);
+---
+<article class={`kartu ${d.status === 'segera' ? 'segera' : ''}`}>
+  <div class="baris">
+    <h4><a href={`/produk/${produk.id}/`}>{d.nama}</a></h4>
+    <span class={`lencana ${d.status}`}>{d.status === 'rilis' ? d.harga : labelStatus}</span>
+  </div>
+  <p>{d.ringkasan}</p>
+  <div class="tautan">
+    {d.tautan && d.status !== 'segera'
+      ? <a href={d.tautan}>{labelTautan}</a>
+      : <span class="belum">Belum dibuka. Pantau halaman ini.</span>}
+    <a class="sekunder" href={`/produk/${produk.id}/`}>Detail</a>
+  </div>
+</article>

@@ -1,0 +1,27 @@
+---
+import { SITUS } from '../lib/situs';
+
+const path = Astro.url.pathname;
+const menu = [
+  { href: '/belajar/', label: 'Belajar' },
+  { href: '/produk/', label: 'Produk' },
+  { href: '/catatan/', label: 'Catatan' },
+  { href: '/acara/', label: 'Acara' },
+  { href: '/#jasa', label: 'Jasa' },
+];
+const aktif = (href: string) => !href.includes('#') && path.startsWith(href);
+---
+<header class="kepala">
+  <div class="dalam">
+    <a href="/" class="merek" aria-label="Sugerio, ke beranda">
+      <span class="logo"><i></i></span>
+      <span class="nama">sugerio</span>
+    </a>
+    <nav class="menu" aria-label="Navigasi utama">
+      {menu.map((m) => (
+        <a href={m.href} aria-current={aktif(m.href) ? 'page' : undefined}>{m.label}</a>
+      ))}
+      <a href={SITUS.lynk} class="toko">Toko Sugerio</a>
+    </nav>
+  </div>
+</header>
